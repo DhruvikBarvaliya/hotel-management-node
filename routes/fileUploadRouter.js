@@ -7,4 +7,4 @@ router.post('/singleFile', upload.single('file'), singleFileUpload)
 router.get('/getAllSingleFiles', getallSingleFiles);
 // router.get('/getSingleFiles/:name', getallSingleFiles);
 
-module.exports = { routes: router }
+module.exports = router
