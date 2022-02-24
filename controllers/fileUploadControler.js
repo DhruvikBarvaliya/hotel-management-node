@@ -1,4 +1,6 @@
 const SingleFile = require('../models/fileUploadModel');
+const path = require('path')
+
 
 const singleFileUpload = async (req, res, next) => {
     try {
@@ -25,6 +27,10 @@ const getallSingleFiles = async (req, res, next) => {
     }
 }
 
+const getFile = async (req, res) => {
+    res.sendFile(path.resolve(`uploads/${req.params.name}`));
+}
+
 const fileSizeFormatter = (bytes, decimal) => {
     if (bytes === 0) {
         return '0 Bytes';
@@ -39,5 +45,6 @@ const fileSizeFormatter = (bytes, decimal) => {
 module.exports = {
     singleFileUpload,
     // fileSizeFormatter,
-    getallSingleFiles
+    getallSingleFiles,
+    getFile
 }
