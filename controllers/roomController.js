@@ -1,22 +1,20 @@
 const room = require('../models/roomModel')
- 
+
 
 
 const addRoom = async (req, res) => {
-    const { name, description, rules, amenities, featured_image } = req.body
+    const { name, description, rules, amenities, imageName, imagePath, imageType, imageSize } = req.body
 
     try {
         const file = new room({
-            name: req.body.name,
-            description: req.body.description,
-            rules: req.body.rules,
-            amenities: req.body.amenities,
-            featured_image: {
-                fileName: req.body.featured_image.fileName,
-                filePath: req.body.featured_image.filePath,
-                fileType: req.body.featured_image.fileType,
-                fileSize: fileSizeFormatter(req.body.featured_image.fileSize, 2)
-            }
+            name,
+            description,
+            rules,
+            amenities,
+            imageName,
+            imagePath,
+            imageType,
+            imageSize: fileSizeFormatter(imageSize, 2)
         });
         // Book.create(data).then(data => {
         //     res.send(data);
@@ -26,13 +24,11 @@ const addRoom = async (req, res) => {
         //     })
         // })
         await file.save();
-        res.status(201).json({ message: 'File Upload Successfully' })
+        res.status(201).json({ message: 'Room Successfully added with Image File Upload' })
 
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
-    res.status(200).json({ message: "Room Successfully added" })
-
 }
 
 const fileSizeFormatter = (bytes, decimal) => {
