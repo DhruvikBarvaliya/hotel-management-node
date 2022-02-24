@@ -7,10 +7,12 @@ app.use(express.json())
 app.use(express.urlencoded())
 app.use(express.static(path.join(__dirname, 'uploads')));
 app.use('/uploads/*', express.static('uploads'));
-const database = require('./config/db');
 
+const database = require('./config/db');
 // database();
+
 app.use(indexRouter)
+
 const port = process.env.PORT || 4000
 
 app.listen(port, console.log(`Server is Running on Port No ${port}`))

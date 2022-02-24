@@ -28,7 +28,7 @@ const getallSingleFiles = async (req, res, next) => {
 }
 
 const getFile = async (req, res) => {
-    res.sendFile(path.resolve(`uploads/${req.params.name}`));
+    res.sendFile(path.resolve(`uploads/room/${req.params.name}`));
 }
 
 const fileSizeFormatter = (bytes, decimal) => {
