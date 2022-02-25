@@ -1,6 +1,5 @@
 const room = require('../models/roomModel')
-
-
+const path = require('path')
 
 const addRoom = async (req, res) => {
     const { name, description, rules, amenities, imageName, imagePath, imageType, imageSize } = req.body
@@ -30,6 +29,13 @@ const addRoom = async (req, res) => {
         res.status(400).json({ error: error.message })
     }
 }
+const getFile = async (req, res) => {
+    res.sendFile(path.resolve(`uploads/room/${req.params.name}`));
+}
+
+// const getAllFile = async (req, res) => {
+//     res.sendFile(path.resolve(`uploads/room/`));
+// }
 
 const fileSizeFormatter = (bytes, decimal) => {
     if (bytes === 0) {
@@ -42,5 +48,7 @@ const fileSizeFormatter = (bytes, decimal) => {
 
 }
 module.exports = {
-    addRoom
+    addRoom,
+    getFile,
+    // getAllFile
 }
