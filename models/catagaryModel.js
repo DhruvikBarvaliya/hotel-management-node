@@ -5,22 +5,14 @@ const catagarySchema = mongoose.Schema({
         type: String,
     },
 
-    imageName: {
+    catagary_image: {
         type: String,
-        required: true
+        trim: true
     },
-    imagePath: {
-        type: String,
-        required: true
+    status: {
+        type: Boolean,
+        deafult: true
     },
-    imageType: {
-        type: String,
-        required: true
-    },
-    imageSize: {
-        type: String,
-        required: true
-    }
 
 }, {
     timestamps: true

@@ -32,12 +32,17 @@ const roomSchema = mongoose.Schema({
     imageSize: {
         type: String,
         required: true
-    }
+    },
 
     // gallery_image: {
     //     data: Buffer,
     //     contentType: String
     // },
+    status: {
+        type: Boolean,
+        deafult: true
+
+    },
 
 }, {
     timestamps: true

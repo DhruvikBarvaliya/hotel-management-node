@@ -99,13 +99,7 @@ const getAllUser = (req, res) => {
 
 const updateUserById = async (req, res) => {
     const { name, email, password, phone, tc, status } = req.body
-    if (tc == false) {
-        return res.status(400).json({ message: "Make sure T&C is Accept" })
-
-    }
-    if (!name || !email || !password || !phone || !tc) {
-        return res.status(400).json({ message: "Please Insert All Fields" })
-    }
+  
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password, salt)
 
