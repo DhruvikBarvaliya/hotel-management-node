@@ -40,6 +40,7 @@ const fileFilter = (req, file, callback) => {
 const upload = multer({ storage: storage, fileFilter: fileFilter })
 // const gupload = multer({ gstorage: gstorage, fileFilter: fileFilter })
 
-module.exports = { upload,
-    //  gupload 
-    }
+module.exports = {
+    upload,
+    // gupload 
+}

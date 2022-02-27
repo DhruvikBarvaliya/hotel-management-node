@@ -9,27 +9,33 @@ const userSchema = mongoose.Schema({
     email: {
         type: String,
         unique: true,
+        trim: true,
         required: [true, 'Email field is required']
     },
     password: {
         type: String,
+        trim: true,
         required: [true, 'Password field is required']
 
     },
-    conform_password: {
-        type: String,
-        required: [true, 'Conform Password field is required']
-
-    },
-    phone_no: {
+    phone: {
         type: String,
         required: [true, 'Phone No. field is required']
 
+    },
+    user_img: {
+        type: String,
+        trim: true
     },
     tc: {
         type: Boolean,
         required: [true, 'Terms And Condition field is required'],
         deafult: false
+
+    },
+    status: {
+        type: Boolean,
+        deafult: true
 
     },
 }, {
