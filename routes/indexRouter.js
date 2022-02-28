@@ -7,19 +7,11 @@ const mailSendRouter = require('./mailSendRouter')
 const fileUploadRouter = require('./fileUploadRouter')
 const bannerRouter = require('./bannerRouter')
 
-
-router.get('/', (req, res) => {
-    res.json({ message: "Inside Index Routes" })
-})
-
-router.use('/api',
-    userRouter,
-    roomRouter,
-    catagaryRouter,
-    mailSendRouter,
-    fileUploadRouter,
-    bannerRouter
-)
-
+router.use('/user', userRouter)
+router.use('/room', roomRouter)
+router.use('/catagary', catagaryRouter)
+router.use('/mail', mailSendRouter)
+router.use('/file', fileUploadRouter)
+router.use('/banner', bannerRouter)
 
 module.exports = router

@@ -26,13 +26,10 @@ const catagarySchema = async (req, res) => {
             })
         }
 
-
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
-
 }
-
 
 const getAllCatagary = (req, res) => {
     catagary.find({}).then(result => {
@@ -52,6 +49,10 @@ const getAllCatagary = (req, res) => {
 }
 
 const deleteCatagaryByName = async (req, res) => {
+    const catagaryExists = await catagary.findOne({ catagary_name: req.params.name })
+    if (!catagaryExists) {
+        return res.status(400).json({ message: "Catagary Not Exists" })
+    }
     catagary.findOneAndDelete({ name: req.params.name }).then(result => {
         if (result) {
             res.json({
@@ -118,27 +119,24 @@ const disableUserByName = async (req, res) => {
 
 const updateCategorieByName = async (req, res) => {
     const { catagary_name, status } = req.body
-
-    const catagaryExists = await catagary.findOne({ name: req.params.name })
-
+    const catagaryExists = await catagary.findOne({ catagary_name: req.params.name })
     if (!catagaryExists) {
-        return res.status(400).json({ message: "Categorie Not Exists" })
-    } else {
-        catagary.updateOne({ catagary_name, status }).then(result => {
-            if (result) {
-                res.json({
-                    success: 1,
-                    message: "Data Updated",
-                    data: result
-                })
-            } else {
-                res.json({
-                    success: 0,
-                    message: "Fail Update"
-                })
-            }
-        })
+        return res.status(400).json({ message: "Catagary Not Exists" })
     }
+    catagary.findOneAndUpdate({ catagary_name: req.params.name }, { catagary_name, status }).then(result => {
+        if (result) {
+            res.json({
+                success: 1,
+                message: "Data Updated",
+                data: result
+            })
+        } else {
+            res.json({
+                success: 0,
+                message: "Fail Update"
+            })
+        }
+    })
 
 }
 

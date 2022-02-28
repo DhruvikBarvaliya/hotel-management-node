@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { bannerSchema, getAllBanner,deleteBannerByImage,enableBannerByName,
     updateBannerByName,disableBannerByName ,enableAllBanner,
-    disableAllBanner} = require('../controllers/bannerController')
+    disableAllBanner,deleteAllBanner} = require('../controllers/bannerController')
 
 const multer = require("multer");
 
@@ -21,11 +21,11 @@ const upload = multer({ storage: storage });
 router.post('/addBanner', upload.single('file'), bannerSchema)
 router.get('/getAllBanner', getAllBanner)
 router.delete('/deleteBannerByImage/:banner_image', deleteBannerByImage)
-
+router.delete('/deleteAllBanner', deleteAllBanner)
 router.put('/updateBannerByName/:banner_image', upload.single('file'), updateBannerByName)
-
 router.patch('/enableBanner/:banner_image', enableBannerByName)
 router.patch('/disableBanner/:banner_image', disableBannerByName)
 router.patch('/enableAllBanner', enableAllBanner)
 router.patch('/disableAllBanner', disableAllBanner)
+
 module.exports = router

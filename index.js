@@ -9,9 +9,9 @@ app.use(express.static(path.join(__dirname, 'uploads')));
 app.use('/uploads/*', express.static('uploads'));
 
 const database = require('./config/db');
-// database();
+database();
 
-app.use(indexRouter)
+app.use("/api", indexRouter)
 
 const port = process.env.PORT || 4000
 

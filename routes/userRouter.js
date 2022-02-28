@@ -1,17 +1,18 @@
 const express = require('express')
+const multer = require("multer");
 const router = express.Router()
 const {
     registerUser,
     login,
     getAllUser,
-    updateUserById,
+    updateUserByEmail,
     deleteAllUser,
-    deleteUserById,
+    deleteUserByEmail,
     enableUserByEmail,
     disableUserByEmail,
     enableAllUser,
     disableAllUser } = require('../controllers/userController')
-const multer = require("multer");
+    
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -25,15 +26,14 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-
 router.post('/register', upload.single('file'), registerUser)
 router.post('/login', login)
 router.get('/', getAllUser)
-router.put('/:email', upload.single('file'), updateUserById)
+router.put('/:email', upload.single('file'), updateUserByEmail)
 router.put('/enable/:email', enableUserByEmail)
 router.put('/disable/:email', disableUserByEmail)
 router.delete('/', deleteAllUser)
-router.delete('/:email', deleteUserById)
+router.delete('/:email', deleteUserByEmail)
 router.patch('/enableAllUser', enableAllUser)
 router.patch('/disableAllUser', disableAllUser)
 

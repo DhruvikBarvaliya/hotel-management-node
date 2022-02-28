@@ -62,6 +62,23 @@ const deleteBannerByImage = async (req, res) => {
     }
 }
 
+const deleteAllBanner = async (req, res) => {
+    banner.remove({}).then(result => {
+        if (result) {
+            res.json({
+                success: 1,
+                message: "Data Deleted",
+                data: result
+            })
+        } else {
+            res.json({
+                success: 0,
+                message: "Fail Delete"
+            })
+        }
+    })
+}
+
 const enableBannerByName = async (req, res) => {
     const status = true
     const bannerExists = await banner.findOne({ banner_image: req.params.banner_image })
@@ -69,12 +86,15 @@ const enableBannerByName = async (req, res) => {
     if (!bannerExists) {
         return res.status(400).json({ message: "banner Not Exists" })
     } else {
-        banner.updateOne({ status }).then(result => {
+        banner.findOneAndUpdate({ banner_image: req.params.banner_image }, { status }).then(result => {
             if (result) {
                 res.json({
                     success: 1,
                     message: "Data Updated",
-                    data: result
+                    data: {
+                        banner_image: result.banner_image,
+                        status: true
+                    }
                 })
             } else {
                 res.json({
@@ -88,17 +108,20 @@ const enableBannerByName = async (req, res) => {
 
 const disableBannerByName = async (req, res) => {
     const status = false
-    const bannerExists = await banner.findOne({ name: req.params.name })
+    const bannerExists = await banner.findOne({ banner_image: req.params.banner_image })
 
     if (!bannerExists) {
         return res.status(400).json({ message: "banner Not Exists" })
     } else {
-        banner.updateOne({ status }).then(result => {
+        banner.findOneAndUpdate({ banner_image: req.params.banner_image }, { status }).then(result => {
             if (result) {
                 res.json({
                     success: 1,
                     message: "Data Updated",
-                    data: result
+                    data: {
+                        banner_image: result.banner_image,
+                        status: false
+                    }
                 })
             } else {
                 res.json({
@@ -111,27 +134,30 @@ const disableBannerByName = async (req, res) => {
 }
 
 const updateBannerByName = async (req, res) => {
-    const { status } = req.body
+    try {
+        const { status } = req.body
+        const bannerExists = await banner.findOne({ banner_image: req.params.banner_image })
 
-    const bannerExists = await banner.findOne({ banner_image: req.params.banner_image })
-
-    if (!bannerExists) {
-        return res.status(400).json({ message: "Banner Not Exists" })
-    } else {
-        banner.updateOne({ banner_image: req.file.filename, status }).then(result => {
-            if (result) {
-                res.json({
-                    success: 1,
-                    message: "Data Updated",
-                    data: result
-                })
-            } else {
-                res.json({
-                    success: 0,
-                    message: "Fail Update"
-                })
-            }
-        })
+        if (!bannerExists) {
+            return res.status(400).json({ message: "Banner Not Exists" })
+        } else {
+            banner.findOneAndUpdate({ banner_image: req.params.banner_image }, { banner_image: req.file.filename, status }).then(result => {
+                if (result) {
+                    res.json({
+                        success: 1,
+                        message: "Data Updated",
+                        data: result
+                    })
+                } else {
+                    res.json({
+                        success: 0,
+                        message: "Fail Update"
+                    })
+                }
+            })
+        }
+    } catch (error) {
+        return res.json({ message: "Please Check your Input Field", error: error })
     }
 
 }
@@ -184,5 +210,6 @@ module.exports = {
     disableBannerByName,
     updateBannerByName,
     enableAllBanner,
-    disableAllBanner
+    disableAllBanner,
+    deleteAllBanner
 }

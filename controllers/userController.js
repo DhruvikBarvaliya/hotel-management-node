@@ -97,7 +97,7 @@ const getAllUser = (req, res) => {
     })
 }
 
-const updateUserById = async (req, res) => {
+const updateUserByEmail = async (req, res) => {
     const { name, email, password, phone, tc, status } = req.body
   
     const salt = await bcrypt.genSalt(10)
@@ -230,7 +230,7 @@ const deleteAllUser = async (req, res) => {
         }
     })
 }
-const deleteUserById = async (req, res) => {
+const deleteUserByEmail = async (req, res) => {
     userModel.findOneAndDelete({ email: req.params.email }).then(result => {
         if (result) {
             res.json({
@@ -250,9 +250,9 @@ module.exports = {
     registerUser,
     login,
     getAllUser,
-    updateUserById,
+    updateUserByEmail,
     deleteAllUser,
-    deleteUserById,
+    deleteUserByEmail,
     enableUserByEmail,
     disableUserByEmail,
     enableAllUser,

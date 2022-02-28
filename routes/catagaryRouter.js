@@ -15,6 +15,7 @@ const storage = multer.diskStorage({
         cb(null, req.body.catagary_name + '-' + file.fieldname + '-' + Date.now() + "." + extension);
     }
 });
+
 const upload = multer({ storage: storage });
 
 router.post('/addCatagary', upload.single('file'), catagarySchema)
