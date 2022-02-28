@@ -5,6 +5,7 @@ const roomRouter = require('./roomRouter')
 const catagaryRouter = require('./catagaryRouter')
 const mailSendRouter = require('./mailSendRouter')
 const fileUploadRouter = require('./fileUploadRouter')
+const bannerRouter = require('./bannerRouter')
 
 
 router.get('/', (req, res) => {
@@ -16,7 +17,8 @@ router.use('/api',
     roomRouter,
     catagaryRouter,
     mailSendRouter,
-    fileUploadRouter
+    fileUploadRouter,
+    bannerRouter
 )
 
 

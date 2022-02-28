@@ -15,13 +15,13 @@ const catagarySchema = async (req, res) => {
         } else {
             await catagary.create({
                 catagary_name,
-                user_img: req.file.filename,
+                catagary_image: req.file.filename,
                 status
             })
             return res.status(200).json({
                 message: "Catagary Successfully Added with Image File Upload",
                 catagary_name,
-                user_img: req.file.filename,
+                catagary_image: req.file.filename,
                 status
             })
         }
