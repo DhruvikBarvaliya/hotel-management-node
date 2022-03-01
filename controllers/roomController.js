@@ -2,7 +2,7 @@ const room = require('../models/roomModel')
 const path = require('path')
 
 const addRoom = async (req, res) => {
-    const { name, description, rules, amenities, imageName, imagePath, imageType, imageSize } = req.body
+    const { name, description, rules, amenities, status } = req.body
 
     try {
         const file = new room({
@@ -10,18 +10,10 @@ const addRoom = async (req, res) => {
             description,
             rules,
             amenities,
-            imageName,
-            imagePath,
-            imageType,
-            imageSize: fileSizeFormatter(imageSize, 2)
+            room_image: req.file.filename,
+            status
         });
-        // Book.create(data).then(data => {
-        //     res.send(data);
-        // }).catch(error => {
-        //     res.status(500).send({
-        //         message: error.message || "Some error occurred while creating the Book."
-        //     })
-        // })
+
         await file.save();
         res.status(201).json({ message: 'Room Successfully added with Image File Upload' })
 
@@ -33,22 +25,186 @@ const getFile = async (req, res) => {
     res.sendFile(path.resolve(`uploads/room/${req.params.name}`));
 }
 
-// const getAllFile = async (req, res) => {
-//     res.sendFile(path.resolve(`uploads/room/`));
-// }
+const getAllRoom = (req, res) => {
+    room.find({}).then(result => {
+        if (result) {
+            res.json({
+                success: 1,
+                message: "Data Recived",
+                data: result
+            })
+        } else {
+            res.json({
+                success: 0,
+                message: "Fail Recived"
+            })
+        }
+    })
+}
 
-const fileSizeFormatter = (bytes, decimal) => {
-    if (bytes === 0) {
-        return '0 Bytes';
+
+const enableAllRoom = async (req, res) => {
+
+    room.updateMany({},
+        {
+            $set: { status: true }
+        }).then(result => {
+            if (result) {
+                res.json({
+                    success: 1,
+                    message: "Data Updated",
+                    data: result
+                })
+            } else {
+                res.json({
+                    success: 0,
+                    message: "Fail Update"
+                })
+            }
+        })
+}
+const disableAllRoom = async (req, res) => {
+    room.updateMany({},
+        {
+            $set: { status: false }
+        }).then(result => {
+            if (result) {
+                res.json({
+                    success: 1,
+                    message: "Data Updated",
+                    data: result
+                })
+            } else {
+                res.json({
+                    success: 0,
+                    message: "Fail Update"
+                })
+            }
+        })
+}
+const deleteAllRoom = async (req, res) => {
+    room.remove({}).then(result => {
+        if (result) {
+            res.json({
+                success: 1,
+                message: "Data Deleted",
+                data: result
+            })
+        } else {
+            res.json({
+                success: 0,
+                message: "Fail Delete"
+            })
+        }
+    })
+}
+
+
+const enableRoomById = async (req, res) => {
+    const status = true
+    const roomExists = await room.findById(req.params.id)
+
+    if (!roomExists) {
+        return res.status(400).json({ message: "Room Not Exists" })
+    } else {
+        await room.findByIdAndUpdate(req.params.id, { status }).then(result => {
+            if (result) {
+                res.json({
+                    success: 1,
+                    message: "Data Updated",
+                    data: result
+                })
+            } else {
+                res.json({
+                    success: 0,
+                    message: "Fail Update"
+                })
+            }
+        })
     }
-    const dm = decimal || 2;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'YB', 'ZB'];
-    const index = Math.floor(Math.log(bytes) / Math.log(1000));
-    return parseFloat((bytes / Math.pow(1000, index)).toFixed(dm)) + ' ' + sizes[index];
+}
+
+const disableRoomById = async (req, res) => {
+    const status = false
+    const roomExists = await room.findById(req.params.id)
+
+    if (!roomExists) {
+        return res.status(400).json({ message: "Room Not Exists" })
+    } else {
+        await room.findByIdAndUpdate(req.params.id, { status }).then(result => {
+            if (result) {
+                res.json({
+                    success: 1,
+                    message: "Data Updated",
+                    data: result
+                })
+            } else {
+                res.json({
+                    success: 0,
+                    message: "Fail Update"
+                })
+            }
+        })
+    }
+}
+
+const deleteRoomById = async (req, res) => {
+    room.findOneAndDelete({ _id: req.params.id }).then(result => {
+        if (result) {
+            res.json({
+                success: 1,
+                message: "Data Deleted",
+                Id: result._id
+            })
+        } else {
+            res.json({
+                success: 0,
+                message: "Fail Delete"
+            })
+        }
+    })
+}
+
+const updateRoomById = async (req, res) => {
+    const { name, description, rules, amenities, status } = req.body
+    const roomExists = await room.findById(req.params.id)
+
+    if (!roomExists) {
+        return res.status(400).json({ message: "User Not Exists" })
+    } else {
+        room.findByIdAndUpdate({ _id: req.params.id }, {
+            name, description,
+            rules,
+            amenities,
+            room_image: req.file.filename,
+            status
+        }).then(result => {
+            if (result) {
+                res.json({
+                    success: 1,
+                    message: "Data Updated",
+                    data: result
+                })
+            } else {
+                res.json({
+                    success: 0,
+                    message: "Fail Update"
+                })
+            }
+        })
+    }
 
 }
+
 module.exports = {
     addRoom,
+    getAllRoom,
     getFile,
-    // getAllFile
+    enableAllRoom,
+    disableAllRoom,
+    deleteAllRoom,
+    enableRoomById,
+    disableRoomById,
+    deleteRoomById,
+    updateRoomById
 }

@@ -1,9 +1,13 @@
 const express = require('express')
 const router = express.Router()
-// const { upload, gupload } = require('../helper/fileHelper')
-const { addRoom, getFile, getAllFile } = require('../controllers/roomController')
-
 const multer = require("multer");
+const { addRoom, getAllRoom, getFile, enableAllRoom,
+    disableAllRoom,
+    deleteAllRoom ,
+    enableRoomById,
+    disableRoomById,
+    deleteRoomById,
+    updateRoomById} = require('../controllers/roomController')
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -17,9 +21,16 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-// router.post('/addRoom', upload.single('file'), gupload.single('files'), addRoom)
 router.post('/addRoom', upload.single('file'), addRoom)
-router.get('/getSingleRoomImg/:name', getFile);
-// router.get('/getAllSingleRoomImg', getAllFile);
+router.get('/getAllRoom', getAllRoom);
+router.get('/getFile/:name', getFile);
+router.delete('/', deleteAllRoom)
+router.patch('/enableAllRoom', enableAllRoom)
+router.patch('/disableAllRoom', disableAllRoom)
+router.put('/:id', upload.single('file'), updateRoomById)
+router.put('/enable/:id', enableRoomById)
+router.put('/disable/:id', disableRoomById)
+router.delete('/:id', deleteRoomById)
+
 
 module.exports = router
