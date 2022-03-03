@@ -27,10 +27,10 @@ const roomSchema = mongoose.Schema({
         deafult: true
 
     },
-    // gallery_image: {
-    //     data: Buffer,
-    //     contentType: String
-    // },
+    gallery_image: {
+        type: Array,
+        required: true
+    },
 
 }, {
     timestamps: true

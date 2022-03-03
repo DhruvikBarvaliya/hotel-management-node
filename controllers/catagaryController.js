@@ -2,7 +2,7 @@ const catagary = require('../models/catagaryModel')
 
 
 const catagarySchema = async (req, res) => {
-    const { catagary_name, status } = req.body
+    const { catagary_name, catagary_image, status } = req.body
     if (!catagary_name) {
         return res.status(400).json({ message: "Please Insert Catagary Name" })
     }
@@ -15,13 +15,13 @@ const catagarySchema = async (req, res) => {
         } else {
             await catagary.create({
                 catagary_name,
-                catagary_image: req.file.filename,
+                catagary_image,
                 status
             })
             return res.status(200).json({
                 message: "Catagary Successfully Added with Image File Upload",
                 catagary_name,
-                catagary_image: req.file.filename,
+                catagary_image,
                 status
             })
         }
@@ -118,12 +118,12 @@ const disableUserByName = async (req, res) => {
 }
 
 const updateCategorieByName = async (req, res) => {
-    const { catagary_name, status } = req.body
+    const { catagary_name, catagary_image, status } = req.body
     const catagaryExists = await catagary.findOne({ catagary_name: req.params.name })
     if (!catagaryExists) {
         return res.status(400).json({ message: "Catagary Not Exists" })
     }
-    catagary.findOneAndUpdate({ catagary_name: req.params.name }, { catagary_name, status }).then(result => {
+    catagary.findOneAndUpdate({ catagary_name: req.params.name }, { catagary_name, catagary_image, status }).then(result => {
         if (result) {
             res.json({
                 success: 1,

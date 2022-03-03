@@ -1,31 +1,15 @@
 const express = require('express')
 const router = express.Router()
-const { bannerSchema, getAllBanner,deleteBannerByImage,enableBannerByName,
-    updateBannerByName,disableBannerByName ,enableAllBanner,
-    disableAllBanner,deleteAllBanner} = require('../controllers/bannerController')
+const bannerController = require('../controllers/bannerController')
 
-const multer = require("multer");
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, "./uploads/banner");
-    },
-    filename: function (req, file, cb) {
-        let extArray = file.mimetype.split("/");
-        let extension = extArray[extArray.length - 1];
-        cb(null, file.fieldname + '-' + Date.now() + "." + extension);
-    }
-});
-const upload = multer({ storage: storage });
-
-router.post('/addBanner', upload.single('file'), bannerSchema)
-router.get('/getAllBanner', getAllBanner)
-router.delete('/deleteBannerByImage/:banner_image', deleteBannerByImage)
-router.delete('/deleteAllBanner', deleteAllBanner)
-router.put('/updateBannerByName/:banner_image', upload.single('file'), updateBannerByName)
-router.patch('/enableBanner/:banner_image', enableBannerByName)
-router.patch('/disableBanner/:banner_image', disableBannerByName)
-router.patch('/enableAllBanner', enableAllBanner)
-router.patch('/disableAllBanner', disableAllBanner)
+router.post('/addBanner', bannerController.bannerSchema)
+router.get('/getAllBanner', bannerController.getAllBanner)
+router.put('/updateBannerByName/:banner_image', bannerController.updateBannerByName)
+router.patch('/enableAllBanner', bannerController.enableAllBanner)
+router.patch('/disableAllBanner', bannerController.disableAllBanner)
+router.patch('/enableBanner/:banner_image', bannerController.enableBannerByName)
+router.patch('/disableBanner/:banner_image', bannerController.disableBannerByName)
+router.delete('/deleteAllBanner', bannerController.deleteAllBanner)
+router.delete('/deleteBannerByImage/:banner_image', bannerController.deleteBannerByImage)
 
 module.exports = router

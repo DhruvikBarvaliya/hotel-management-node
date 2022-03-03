@@ -2,7 +2,7 @@ const room = require('../models/roomModel')
 const path = require('path')
 
 const addRoom = async (req, res) => {
-    const { name, description, rules, amenities, status } = req.body
+    const { name, description, rules, amenities, status, room_image, gallery_image } = req.body
 
     try {
         const file = new room({
@@ -10,7 +10,8 @@ const addRoom = async (req, res) => {
             description,
             rules,
             amenities,
-            room_image: req.file.filename,
+            room_image,
+            gallery_image,
             status
         });
 
@@ -20,9 +21,6 @@ const addRoom = async (req, res) => {
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
-}
-const getFile = async (req, res) => {
-    res.sendFile(path.resolve(`uploads/room/${req.params.name}`));
 }
 
 const getAllRoom = (req, res) => {
@@ -166,7 +164,7 @@ const deleteRoomById = async (req, res) => {
 }
 
 const updateRoomById = async (req, res) => {
-    const { name, description, rules, amenities, status } = req.body
+    const { name, description, rules, amenities, status, room_image, gallery_image } = req.body
     const roomExists = await room.findById(req.params.id)
 
     if (!roomExists) {
@@ -176,7 +174,8 @@ const updateRoomById = async (req, res) => {
             name, description,
             rules,
             amenities,
-            room_image: req.file.filename,
+            room_image,
+            gallery_image,
             status
         }).then(result => {
             if (result) {
@@ -199,7 +198,6 @@ const updateRoomById = async (req, res) => {
 module.exports = {
     addRoom,
     getAllRoom,
-    getFile,
     enableAllRoom,
     disableAllRoom,
     deleteAllRoom,

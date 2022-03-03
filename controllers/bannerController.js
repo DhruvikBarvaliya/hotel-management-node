@@ -2,16 +2,16 @@ const banner = require('../models/bannerModel')
 
 
 const bannerSchema = async (req, res) => {
-    const { status } = req.body
+    const { banner_image, status } = req.body
 
     try {
         await banner.create({
-            banner_image: req.file.filename,
+            banner_image,
             status
         })
         return res.status(200).json({
             message: "banner Successfully Added with Image File Upload",
-            banner_image: req.file.filename,
+            banner_image,
             status
         })
 
@@ -135,13 +135,13 @@ const disableBannerByName = async (req, res) => {
 
 const updateBannerByName = async (req, res) => {
     try {
-        const { status } = req.body
+        const {banner_image, status } = req.body
         const bannerExists = await banner.findOne({ banner_image: req.params.banner_image })
 
         if (!bannerExists) {
             return res.status(400).json({ message: "Banner Not Exists" })
         } else {
-            banner.findOneAndUpdate({ banner_image: req.params.banner_image }, { banner_image: req.file.filename, status }).then(result => {
+            banner.findOneAndUpdate({ banner_image: req.params.banner_image }, { banner_image: banner_image }).then(result => {
                 if (result) {
                     res.json({
                         success: 1,
