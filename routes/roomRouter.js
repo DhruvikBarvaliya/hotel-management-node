@@ -1,16 +1,17 @@
 const express = require('express')
 const router = express.Router()
 const roomController = require('../controllers/roomController')
+const auth = require("../middleware/auth")
 
-router.post('/addRoom', roomController.addRoom)
-router.get('/getAllRoom', roomController.getAllRoom);
-router.put('/:id', roomController.updateRoomById)
-router.patch('/enableAllRoom', roomController.enableAllRoom)
-router.patch('/disableAllRoom', roomController.disableAllRoom)
-router.patch('/enable/:id', roomController.enableRoomById)
-router.patch('/disable/:id', roomController.disableRoomById)
-router.delete('/', roomController.deleteAllRoom)
-router.delete('/:id', roomController.deleteRoomById)
+router.post('/addRoom', auth, roomController.addRoom)
+router.get('/getAllRoom', auth, roomController.getAllRoom);
+router.put('/:id', auth, roomController.updateRoomById)
+router.patch('/enableAllRoom', auth, roomController.enableAllRoom)
+router.patch('/disableAllRoom', auth, roomController.disableAllRoom)
+router.patch('/enable/:id', auth, roomController.enableRoomById)
+router.patch('/disable/:id', auth, roomController.disableRoomById)
+router.delete('/', auth, roomController.deleteAllRoom)
+router.delete('/:id', auth, roomController.deleteRoomById)
 
 
 module.exports = router
