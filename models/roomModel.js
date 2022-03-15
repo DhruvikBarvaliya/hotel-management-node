@@ -19,7 +19,6 @@ const roomSchema = mongoose.Schema({
 
     room_image: {
         type: String,
-        required: true
     },
 
     status: {
@@ -29,7 +28,6 @@ const roomSchema = mongoose.Schema({
     },
     gallery_image: {
         type: Array,
-        required: true
     },
 
 }, {

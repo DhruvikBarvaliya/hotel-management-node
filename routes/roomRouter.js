@@ -2,8 +2,9 @@ const express = require('express')
 const router = express.Router()
 const roomController = require('../controllers/roomController')
 const auth = require("../middleware/auth")
+const { upload } = require("../create-bucket")
 
-router.post('/addRoom', auth, roomController.addRoom)
+router.post('/addRoom', auth, upload.array('room_image', 1), roomController.addRoom)
 router.get('/getAllRoom', auth, roomController.getAllRoom);
 router.put('/:id', auth, roomController.updateRoomById)
 router.patch('/enableAllRoom', auth, roomController.enableAllRoom)

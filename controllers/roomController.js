@@ -1,17 +1,50 @@
+require("dotenv").config()
 const room = require('../models/roomModel')
-const path = require('path')
+// const path = require('path')
+// const aws = require("aws-sdk");
+// const multer = require("multer");
+// const multerS3 = require("multer-s3");
+
+// const s3 = new aws.S3({
+//     accessKeyId: process.env.S3_ACCESS_KEY,
+//     secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+//     region: process.env.S3_BUCKET_REGION,
+// });
+
+// const upload = () =>
+//     multer({
+//         storage: multerS3({
+//             s3,
+//             bucket: process.env.S3_BUCKET_NAME,
+//             metadata: function (req, file, cb) {
+//                 cb(null, { fieldName: file.fieldname });
+//             },
+//             key: function (req, file, cb) {
+//                 cb(null, `image-${Date.now()}.jpeg`);
+//             },
+//         }),
+//     });
+
+// uploadSingle(req, res, async (err) => {
+//     if (err)
+//         return res.status(400).json({ success: false, message: err.message });
+
+//     await User.create({ photoUrl: req.file.location });
+
+//     res.status(200).json({ data: req.file.location });
+// });
 
 const addRoom = async (req, res) => {
-    const { name, description, rules, amenities, status, room_image, gallery_image } = req.body
-
+    const { name, description, rules, amenities, status } = req.body
+    // const uploadSingle = upload()
     try {
         const file = new room({
             name,
             description,
             rules,
             amenities,
-            room_image,
-            gallery_image,
+            room_image: req.files[0].location || "No Image Found",
+            // gallery_image:req.files[0].location,
             status
         });
 
