@@ -31,7 +31,8 @@ const roomSchema = mongoose.Schema({
     },
 
 }, {
-    timestamps: true
+    timestamps: true,
+    versionKey: false
 })
 
 module.exports = mongoose.model('rooms', roomSchema)

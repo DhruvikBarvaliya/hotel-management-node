@@ -12,7 +12,8 @@ const bannerSchema = mongoose.Schema({
     },
 
 }, {
-    timestamps: true
+    timestamps: true,
+    versionKey: false
 })
 
 module.exports = mongoose.model('banner', bannerSchema)

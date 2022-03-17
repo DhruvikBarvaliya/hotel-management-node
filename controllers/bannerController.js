@@ -2,16 +2,24 @@ const banner = require('../models/bannerModel')
 
 
 const bannerSchema = async (req, res) => {
-    const { banner_image, status } = req.body
+    const { status } = req.body
 
     try {
+        let banner_image
+        if (req.files.length > 0 && req.files[0].location && req.files[0].location != undefined) {
+            banner_image = req.files[0].location
+
+        } else {
+            banner_image = "No Image Found"
+
+        }
         await banner.create({
             banner_image,
             status
         })
         return res.status(200).json({
             message: "banner Successfully Added with Image File Upload",
-            banner_image,
+            banner_image: req.files[0].location || "No Image Found",
             status
         })
 
@@ -39,27 +47,35 @@ const getAllBanner = (req, res) => {
 }
 
 const deleteBannerByImage = async (req, res) => {
-    const bannerExists = await banner.findOne({ banner_image: req.params.banner_image })
+    try {
+        let id = req.params.id
+        const bannerExists = await banner.findById(id)
 
-    if (!bannerExists) {
-        res.json({ bannerExists: "Banner Not Exists" })
-    } else {
+        if (!bannerExists) {
+            res.json({ bannerExists: "Banner Not Exists" })
+        } else {
 
-        await banner.findByIdAndDelete(bannerExists._id).then(result => {
-            if (result) {
-                res.json({
-                    success: 1,
-                    message: "Data Deleted",
-                    Id: result._id
-                })
-            } else {
-                res.json({
-                    success: 0,
-                    message: "Fail Delete"
-                })
-            }
-        })
+            await banner.findByIdAndDelete(id).then(result => {
+                if (result) {
+                    res.json({
+                        success: 1,
+                        message: "Data Deleted",
+                        // Id: result._id
+                    })
+                } else {
+                    res.json({
+                        success: 0,
+                        message: "Fail Delete"
+                    })
+                }
+            })
+        }
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+
     }
+
+
 }
 
 const deleteAllBanner = async (req, res) => {
@@ -80,13 +96,14 @@ const deleteAllBanner = async (req, res) => {
 }
 
 const enableBannerByName = async (req, res) => {
+    let id = req.params.id
     const status = true
-    const bannerExists = await banner.findOne({ banner_image: req.params.banner_image })
+    const bannerExists = await banner.findOne({ id })
 
     if (!bannerExists) {
         return res.status(400).json({ message: "banner Not Exists" })
     } else {
-        banner.findOneAndUpdate({ banner_image: req.params.banner_image }, { status }).then(result => {
+        banner.findOneAndUpdate({ id }, { status }).then(result => {
             if (result) {
                 res.json({
                     success: 1,
@@ -107,13 +124,14 @@ const enableBannerByName = async (req, res) => {
 }
 
 const disableBannerByName = async (req, res) => {
+    let id = req.params.id
     const status = false
-    const bannerExists = await banner.findOne({ banner_image: req.params.banner_image })
+    const bannerExists = await banner.findOne({ id })
 
     if (!bannerExists) {
         return res.status(400).json({ message: "banner Not Exists" })
     } else {
-        banner.findOneAndUpdate({ banner_image: req.params.banner_image }, { status }).then(result => {
+        banner.findOneAndUpdate({ id }, { status }).then(result => {
             if (result) {
                 res.json({
                     success: 1,
@@ -135,13 +153,20 @@ const disableBannerByName = async (req, res) => {
 
 const updateBannerByName = async (req, res) => {
     try {
-        const {banner_image, status } = req.body
-        const bannerExists = await banner.findOne({ banner_image: req.params.banner_image })
+        let id = req.params.id
+        const { status } = req.body
+        const bannerExists = await banner.findOne({ id })
 
         if (!bannerExists) {
             return res.status(400).json({ message: "Banner Not Exists" })
         } else {
-            banner.findOneAndUpdate({ banner_image: req.params.banner_image }, { banner_image: banner_image }).then(result => {
+            let banner_image
+            if (req.files.length > 0 && req.files[0].location && req.files[0].location != undefined) {
+                banner_image = req.files[0].location
+            } else {
+                banner_image = "No Image Found"
+            }
+            banner.findOneAndUpdate({ id }, { banner_image, status }).then(result => {
                 if (result) {
                     res.json({
                         success: 1,

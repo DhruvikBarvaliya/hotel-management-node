@@ -2,7 +2,7 @@ const catagary = require('../models/catagaryModel')
 
 
 const catagarySchema = async (req, res) => {
-    const { catagary_name, catagary_image, status } = req.body
+    const { catagary_name, status } = req.body
     if (!catagary_name) {
         return res.status(400).json({ message: "Please Insert Catagary Name" })
     }
@@ -13,6 +13,14 @@ const catagarySchema = async (req, res) => {
         if (catagaryExists) {
             return res.status(400).json({ message: "Catagary Name Alredy Exists" })
         } else {
+            let catagary_image
+            if (req.files.length > 0 && req.files[0].location && req.files[0].location != undefined) {
+                catagary_image = req.files[0].location
+
+            } else {
+                catagary_image = "No Image Found"
+
+            }
             await catagary.create({
                 catagary_name,
                 catagary_image,
@@ -21,7 +29,7 @@ const catagarySchema = async (req, res) => {
             return res.status(200).json({
                 message: "Catagary Successfully Added with Image File Upload",
                 catagary_name,
-                catagary_image,
+                catagary_image: req.files[0].location || "No Image Found",
                 status
             })
         }
@@ -118,10 +126,18 @@ const disableUserByName = async (req, res) => {
 }
 
 const updateCategorieByName = async (req, res) => {
-    const { catagary_name, catagary_image, status } = req.body
+    const { catagary_name, status } = req.body
     const catagaryExists = await catagary.findOne({ catagary_name: req.params.name })
     if (!catagaryExists) {
         return res.status(400).json({ message: "Catagary Not Exists" })
+    }
+    let catagary_image
+    if (req.files.length > 0 && req.files[0].location && req.files[0].location != undefined) {
+        catagary_image = req.files[0].location
+
+    } else {
+        catagary_image = "No Image Found"
+
     }
     catagary.findOneAndUpdate({ catagary_name: req.params.name }, { catagary_name, catagary_image, status }).then(result => {
         if (result) {

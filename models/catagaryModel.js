@@ -15,7 +15,8 @@ const catagarySchema = mongoose.Schema({
     },
 
 }, {
-    timestamps: true
+    timestamps: true,
+    versionKey: false
 })
 
 module.exports = mongoose.model('catagary', catagarySchema)

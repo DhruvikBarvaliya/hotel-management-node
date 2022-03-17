@@ -38,12 +38,20 @@ const addRoom = async (req, res) => {
     const { name, description, rules, amenities, status } = req.body
     // const uploadSingle = upload()
     try {
+        let room_image
+        if (req.files.length > 0 && req.files[0].location && req.files[0].location != undefined) {
+            room_image = req.files[0].location
+
+        } else {
+            room_image = "No Image Found"
+
+        }
         const file = new room({
             name,
             description,
             rules,
             amenities,
-            room_image: req.files[0].location || "No Image Found",
+            room_image,
             // gallery_image:req.files[0].location,
             status
         });
@@ -138,7 +146,7 @@ const enableRoomById = async (req, res) => {
     if (!roomExists) {
         return res.status(400).json({ message: "Room Not Exists" })
     } else {
-        await room.findByIdAndUpdate(req.params.id, { status }).then(result => {
+        await room.findByIdAndUpdate(req.params.id, { status }, { new: true }).then(result => {
             if (result) {
                 res.json({
                     success: 1,
@@ -162,7 +170,7 @@ const disableRoomById = async (req, res) => {
     if (!roomExists) {
         return res.status(400).json({ message: "Room Not Exists" })
     } else {
-        await room.findByIdAndUpdate(req.params.id, { status }).then(result => {
+        await room.findByIdAndUpdate(req.params.id, { status }, { new: true }).then(result => {
             if (result) {
                 res.json({
                     success: 1,
@@ -197,18 +205,27 @@ const deleteRoomById = async (req, res) => {
 }
 
 const updateRoomById = async (req, res) => {
-    const { name, description, rules, amenities, status, room_image, gallery_image } = req.body
+    const { name, description, rules, amenities, status, gallery_image } = req.body
     const roomExists = await room.findById(req.params.id)
 
     if (!roomExists) {
-        return res.status(400).json({ message: "User Not Exists" })
+        return res.status(400).json({ message: "Room Not Exists" })
     } else {
+        let room_image
+        if (req.files.length > 0 && req.files[0].location && req.files[0].location != undefined) {
+            room_image = req.files[0].location
+
+        } else {
+            room_image = "No Image Found"
+
+        }
         room.findByIdAndUpdate({ _id: req.params.id }, {
-            name, description,
+            name,
+            description,
             rules,
             amenities,
             room_image,
-            gallery_image,
+            // gallery_image,
             status
         }).then(result => {
             if (result) {
