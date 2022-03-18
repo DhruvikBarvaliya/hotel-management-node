@@ -34,9 +34,9 @@ module.exports = { upload }
 
 /* const AWS = require('aws-sdk');
 
-const ID = 'AKIA3ICHFA4MHEMIFOOX';
-const SECRET = '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';
-const BUCKET_NAME = 'hotel-management-node-image';
+const ID = process.env.S3_ACCESS_KEY;
+const SECRET = process.env.S3_SECRET_ACCESS_KEY;
+const BUCKET_NAME = process.env.S3_BUCKET_NAME;
 
 const s3 = new AWS.S3({
     accessKeyId: ID,
